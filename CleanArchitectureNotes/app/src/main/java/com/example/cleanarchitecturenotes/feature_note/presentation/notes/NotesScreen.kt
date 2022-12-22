@@ -21,6 +21,7 @@ import androidx.navigation.NavHostController
 import com.example.cleanarchitecturenotes.feature_note.presentation.notes.components.NoteItem
 import com.example.cleanarchitecturenotes.feature_note.presentation.notes.components.OrderSection
 import com.example.cleanarchitecturenotes.feature_note.presentation.notes.viewmodel.NotesViewModel
+import com.example.cleanarchitecturenotes.feature_note.presentation.util.Screen
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,7 +40,9 @@ fun NotesScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    navHostController.navigate(Screen.AddEditNote.route)
+                },
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(
@@ -112,7 +115,12 @@ fun NotesScreen(
                     note = note,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { },
+                        .clickable {
+                            navHostController.navigate(
+                                Screen.AddEditNote.route +
+                                        "?noteId=${note.id}&noteColor=${note.color}"
+                            )
+                        },
                     onDelete = {
                         viewModel.onEvent(NoteEvents.DeleteNote(note))
                         scope.launch {
