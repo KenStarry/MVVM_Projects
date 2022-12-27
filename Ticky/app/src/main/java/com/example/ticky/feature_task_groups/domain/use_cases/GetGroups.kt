@@ -1,0 +1,10 @@
+package com.example.ticky.feature_task_groups.domain.use_cases
+
+import com.example.ticky.feature_task_groups.domain.repository.GroupRepository
+
+class GetGroups(
+    private val repo: GroupRepository
+) {
+
+    operator fun invoke() = repo.getGroupsFromFirestore()
+}
