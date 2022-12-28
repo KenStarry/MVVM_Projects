@@ -1,6 +1,6 @@
 package com.example.ticky.di
 
-import com.example.ticky.core.Constants
+import com.example.ticky.core.presentation.utils.Constants
 import com.example.ticky.feature_task_groups.data.repository.GroupRepositoryImpl
 import com.example.ticky.feature_task_groups.domain.repository.GroupRepository
 import com.example.ticky.feature_task_groups.domain.use_cases.AddGroup
