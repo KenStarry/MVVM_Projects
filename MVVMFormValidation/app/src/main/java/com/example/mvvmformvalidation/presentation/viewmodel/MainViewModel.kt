@@ -4,10 +4,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.mvvmformvalidation.domain.model.ValidationResult
 import com.example.mvvmformvalidation.domain.use_case.ValidateUseCases
 import com.example.mvvmformvalidation.presentation.model.RegistrationFormEvent
 import com.example.mvvmformvalidation.presentation.model.RegistrationFormState
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val useCases: ValidateUseCases
@@ -16,6 +20,8 @@ class MainViewModel(
     var state by mutableStateOf(RegistrationFormState())
 
     //  channel to communicate with our ui
+    private val validationEventChannel = Channel<ValidationEvent>()
+    val validationEvents = validationEventChannel.receiveAsFlow()
 
     fun onEvent(event: RegistrationFormEvent) {
 
@@ -71,8 +77,14 @@ class MainViewModel(
             return
         }
 
+        viewModelScope.launch {
+            validationEventChannel.send(ValidationEvent.Success)
+        }
 
+    }
 
+    sealed class ValidationEvent {
+        object Success : ValidationEvent()
     }
 }
 
