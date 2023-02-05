@@ -12,4 +12,5 @@ object Constants {
         "The password needs to contain at least $PASSWORD_LENGTH characters"
     const val PASSWORD_LETTERS_ERROR =
         "The password needs to contain at least one letter and digit"
+    const val PASSWORD_MATCH_ERROR = "The passwords don't match"
 }
