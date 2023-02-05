@@ -12,9 +12,14 @@ class ValidateRepeatedPassword {
     ): ValidationResult {
 
         if (password != repeatedPassword) {
-            return ValidationResult.Error(Constants.PASSWORD_MATCH_ERROR)
+            return ValidationResult(
+                successful = false,
+                errorMessage = Constants.PASSWORD_MATCH_ERROR
+            )
         }
 
-        return ValidationResult.Success
+        return ValidationResult(
+            successful = true
+        )
     }
 }

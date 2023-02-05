@@ -11,9 +11,14 @@ class ValidateTerms {
     ): ValidationResult {
 
         if (!acceptedTerms) {
-            return ValidationResult.Error(Constants.TERMS_ERROR)
+            return ValidationResult(
+                successful = false,
+                errorMessage = Constants.TERMS_ERROR
+            )
         }
 
-        return ValidationResult.Success
+        return ValidationResult(
+            successful = true
+        )
     }
 }

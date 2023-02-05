@@ -11,7 +11,10 @@ class ValidatePassword {
     ): ValidationResult {
 
         if (password.length < Constants.PASSWORD_LENGTH) {
-            return ValidationResult.Error(Constants.PASSWORD_LENGTH_ERROR)
+            return ValidationResult(
+                successful = false,
+                errorMessage = Constants.PASSWORD_LENGTH_ERROR
+            )
         }
 
         val containsLettersAndDigits = password.any { it.isDigit() } &&
@@ -19,9 +22,14 @@ class ValidatePassword {
 
         //  check if password contains letters and digits
         if (!containsLettersAndDigits) {
-            return ValidationResult.Error(Constants.PASSWORD_LETTERS_ERROR)
+            return ValidationResult(
+                successful = false,
+                errorMessage = Constants.PASSWORD_LETTERS_ERROR
+            )
         }
 
-        return ValidationResult.Success
+        return ValidationResult(
+            successful = true
+        )
     }
 }
