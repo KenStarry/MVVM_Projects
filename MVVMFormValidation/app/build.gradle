@@ -63,4 +63,6 @@ dependencies {
 
     //  viewmodel scope
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
+    //  lifecycle scope
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
 }
