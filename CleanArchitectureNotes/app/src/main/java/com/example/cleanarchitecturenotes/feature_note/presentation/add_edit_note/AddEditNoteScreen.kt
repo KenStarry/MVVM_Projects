@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -130,13 +131,19 @@ fun AddEditNoteScreen(
                 onValueChange = {
                     viewModel.onEvent(AddEditNoteEvent.EnteredTitle(it))
                 },
-                textStyle = MaterialTheme.typography.titleMedium,
+                textStyle = MaterialTheme.typography.titleLarge,
                 onFocusChange = {
                     viewModel.onEvent(AddEditNoteEvent.ChangeTitleFocus(it))
                 },
                 isHintVisible = titleState.isHintVisible,
-                singleLine = true
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                imeAction = ImeAction.Done
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             //  content Text Field
             TransparentHintTextField(
@@ -150,9 +157,11 @@ fun AddEditNoteScreen(
                     viewModel.onEvent(AddEditNoteEvent.ChangeContentFocus(it))
                 },
                 isHintVisible = contentState.isHintVisible,
-                singleLine = true,
+                singleLine = false,
                 modifier = Modifier
                     .fillMaxHeight()
+                    .fillMaxWidth()
+                    .padding(16.dp)
             )
 
         }

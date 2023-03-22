@@ -51,8 +51,29 @@ fun NotesScreen(
                 )
             }
         },
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Your Notes",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                },
+                actions = {
+                    IconButton(onClick = {
+                        //  changing the order
+                        viewModel.onEvent(NoteEvents.ToggleOrderSection)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.List,
+                            contentDescription = "Sort"
+                        )
+                    }
+                }
+            )
+        }
 
-        ) {
+    ) {
 
         Column(
             modifier = Modifier
@@ -60,76 +81,54 @@ fun NotesScreen(
                 .padding(it)
         ) {
 
-            //  heading
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            AnimatedVisibility(
+                visible = state.isOrderSectionVisible,
+                enter = fadeIn() + slideInVertically(),
+                exit = fadeOut() + slideOutVertically()
             ) {
 
-                Text(
-                    text = "Your Notes",
-                    style = MaterialTheme.typography.titleLarge
+                OrderSection(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    noteOrder = state.noteOrder,
+                    onOrderChange = {
+                        viewModel.onEvent(NoteEvents.Order(it))
+                    }
                 )
 
-                IconButton(onClick = {
-                    //  changing the order
-                    viewModel.onEvent(NoteEvents.ToggleOrderSection)
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.List,
-                        contentDescription = "Sort"
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            //  list of notes
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(state.notes) { note ->
+                    NoteItem(
+                        note = note,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                navHostController.navigate(
+                                    Screen.AddEditNote.route +
+                                            "?noteId=${note.id}&noteColor=${note.color}"
+                                )
+                            },
+                        onDelete = {
+                            viewModel.onEvent(NoteEvents.DeleteNote(note))
+                            scope.launch {
+                                //  show snack bar
+                            }
+                        }
                     )
                 }
             }
 
-        }
-
-        AnimatedVisibility(
-            visible = state.isOrderSectionVisible,
-            enter = fadeIn() + slideInVertically(),
-            exit = fadeOut() + slideOutVertically()
-        ) {
-
-            OrderSection(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                noteOrder = state.noteOrder,
-                onOrderChange = {
-                    viewModel.onEvent(NoteEvents.Order(it))
-                }
-            )
-
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        //  list of notes
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(state.notes) { note ->
-                NoteItem(
-                    note = note,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            navHostController.navigate(
-                                Screen.AddEditNote.route +
-                                        "?noteId=${note.id}&noteColor=${note.color}"
-                            )
-                        },
-                    onDelete = {
-                        viewModel.onEvent(NoteEvents.DeleteNote(note))
-                        scope.launch {
-                            //  show snack bar
-
-                        }
-                    }
-                )
-            }
         }
 
     }
